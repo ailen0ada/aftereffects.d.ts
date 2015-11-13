@@ -13,6 +13,8 @@ declare var write: (text: string) => void;
 /** Writes text to the Info panel, adding a line break at the end. */
 declare var writeLn: (text: string) => void;
 
+declare var writeConsole: (text: string) => void;
+
 /** When true, the specified object exists. */
 declare var isValid: (obj: Object) => boolean;
 
@@ -266,10 +268,14 @@ declare class AVLayer extends Layer {
 	autoOrient: AutoOrientType;
 	
 	/** The layer sampling quality setting. */
-	samplingQuality: LayerSamplingQuality;
+    samplingQuality: LayerSamplingQuality;
+
+    scale: TriValue;
+
+    position: TriValue;
 	
 	/** Reports whether this layer's audio is active at a given time. */
-	audioActiveAtTime(time: number): boolean;
+    audioActiveAtTime(time: number): boolean;
 	
 	/** Calculates a transformation from a set of points in this layer. */
 	calculateTransformFromPoints(pointTopLeft: [number, number, number], pointTopRight: typeof pointTopLeft, pointBottomRight: typeof pointTopLeft): Object;
@@ -282,6 +288,11 @@ declare class AVLayer extends Layer {
 	
 	/** Opens the layer in a Layer panel. */
 	openInViewer(): void;
+}
+
+declare class TriValue {
+    value: number[];
+    setValue(arr: number[]): void;
 }
 
 /** The CameraLayer object represents a camera layer within a composition. Create it using the LayerCollection object’s addCamera method */
@@ -377,6 +388,15 @@ declare class CompItem extends AVItem {
 	
 	/** Opens the composition in a Composition panel. */
 	openInViewer(): Viewer;
+
+    saveFrameToPng(time: number, file: File): ExportTask;
+}
+
+declare class ExportTask {
+    duration: number;
+    onComplete: Function;
+    onError: Function;
+    wait():void;
 }
 
 /** The FileSource object describes footage that comes from a file. */
